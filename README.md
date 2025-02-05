@@ -40,8 +40,10 @@ git push
     "start": "nodemon index.js"
   },
 ```
-## Step 5 Import Middlewares 
+## Step 5 Import Middlewares on Javascript  
+
 ```bash
+
 const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
@@ -60,4 +62,40 @@ const PORT = 8000
 app.listen(PORT,()=>console.log(`Server is running on port ${PORT}`))
 ```
 
+## Step 7 create Error handler
+/middleware/error.js
+```js
+const handleErrors = (err,req,res,next) =>{
+//code 
+res
+.status(err.statusCode || 500)
+.json({message: err.message || "something is wrong!!"});
 
+};
+module.exports =handleErrors;
+```
+and use in index.js
+```js
+//import handleError function
+const handleErrors = require("./src/middlewares/error")
+//use handleError
+app.use(handleErrors)
+```
+and update your try catch
+```js
+exports.login = (req,res,next)=>{
+    //code
+try {
+    console.log(aaaaaaaa)
+    res.json({message: "hello Login"})
+} catch (error) {
+    next(error)
+}
+
+}
+update your code 
+```bash
+git add . 
+git commit -m "your message"
+git push
+```
