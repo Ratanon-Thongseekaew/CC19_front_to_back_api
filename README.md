@@ -61,6 +61,10 @@ app.use(express.json()); //for reading JSON
 const PORT = 8000
 app.listen(PORT,()=>console.log(`Server is running on port ${PORT}`))
 ```
+## step 6 : create routing and controlllers
+
+
+
 
 ## Step 7 create Error handler
 /middleware/error.js
