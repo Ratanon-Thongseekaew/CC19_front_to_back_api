@@ -220,7 +220,7 @@ Import bcryptjs
 const bcrypt = require("bcryptjs")
 ```
 Js Coding [register update]
-```bash update 
+```bash 
               const checkEmail = await prisma.profile.findFirst({
          where:{
              email:email,
@@ -250,5 +250,24 @@ Js Coding [register update]
         next(error)
     }
 }
-    ```
+ ```
+## Step 14 Create user Routes
+```bash
+const express = require("express")
+const userRouter = express.Router();
+//import controller
+const userController = require("../controllers/user-controller")
 
+
+// @endpoint http://localhost:8000/api/users
+
+userRouter.get('/users',userController.listUsers);
+userRouter.patch('/user/update-role',userController.updateRole);
+userRouter.delete('/user/:id',userController.deleteUser)
+
+module.exports = userRouter
+```
+## Step 14.5 Call it at index.js
+```bash
+app.use("/api/",userRouter)
+```

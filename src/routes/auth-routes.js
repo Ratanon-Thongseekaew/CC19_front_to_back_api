@@ -6,8 +6,8 @@ const { validateWithZod, registerSchema, loginSchema } = require("../middlewares
 
 
 //endpoint 
-Authrouter.post('/register', validateWithZod(registerSchema), authControllers.register)
-Authrouter.post('/login',validateWithZod(loginSchema), authControllers.login)
-
+Authrouter.post('/register', validateWithZod(registerSchema), authControllers.register);
+Authrouter.post('/login',validateWithZod(loginSchema), authControllers.login);
+Authrouter.get('/current-user',authControllers.currentUser);
 //export
 module.exports = Authrouter

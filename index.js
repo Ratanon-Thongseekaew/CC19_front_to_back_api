@@ -4,6 +4,7 @@ const morgan = require("morgan")
 const handleErrors = require("./src/middlewares/error")
 //routing
 const authRouter = require("./src/routes/auth-routes")
+const userRouter = require("./src/routes/user-routes")
 //middlewares
 const app =express();
 app.use(cors()); // allow cross domain connection
@@ -12,7 +13,7 @@ app.use(express.json()); //for reading JSON
 
 //routing
 app.use("/api",authRouter)
-
+app.use("/api/",userRouter)
 
 //handleError
 app.use(handleErrors)
