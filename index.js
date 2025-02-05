@@ -14,10 +14,10 @@ app.use(express.json()); //for reading JSON
 app.use("/api",authRouter)
 
 
-
 //handleError
 app.use(handleErrors)
 
 //start server
 const PORT = 8000
 app.listen(PORT,()=>console.log(`Server is running on port ${PORT}`))
+

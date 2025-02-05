@@ -103,3 +103,104 @@ git add .
 git commit -m "your message"
 git push
 ```
+## Step 8: build function named "createError"
+```bash
+const createErrors = (code,message)=>{
+    console.log("step 1 create error")
+    const error = new Error(message)
+    error.statusCode = code
+    throw error;
+};
+
+module.exports = createErrors;
+```
+
+## Step 9 use Zod for Error Validate
+
+import and call Zod
+```bash
+const { z } = require("zod")
+//test validator
+const validateWithZod = ()=> (req,res,next)=>{
+try {
+    console.log("hello, middlewares")
+    next();
+} catch (error) {
+    next(error);
+}
+}
+//validateWithZod = ()=> (req,res,next) เขียนเพราะจะได้รับ parameters ได้ 
+```
+
+Use Zod in router
+```bash
+Authrouter.post('/register', validateWithZod(), authControllers.register)
+
+
+```
+
+# Step 9.5 create condition with Zod Validators
+/middlewares/validators.js
+```bash
+const { z, Schema } = require("zod")
+//test validator
+
+exports.registerSchema =z.object({
+    email: z.string().email(),
+    firstname: z.string().min(3, "firstname must contain at least 3 characters"),
+    lastname: z.string().min(3,"lastname must contain at least 3 characters"),
+    password: z.string().min(6, "password must contain at least 6 characters"),
+    confirmPassword:  z.string().min(6, "password must contain at least 6 characters")
+}).refine((data)=> data.password === data.confirmPassword,{
+    message: "Password Is NOT Matched",
+    path: ["confirmPassword"]
+
+})
+
+exports.loginSchema =z.object({
+    email: z.string().email(),
+    password: z.string().min(6, "password must contain at least 6 characters"),
+})
+
+exports.validateWithZod = (schema)=> (req,res,next)=>{
+try {
+    console.log("hello, middlewares");
+    schema.parse(req.body)
+    next();
+} catch (error) {
+    const errMsg = error.errors.map((item)=>item.message)
+    const errText = errMsg.join(", ")
+    const mergeError = new Error(errText)
+    console.log(error.errors)
+    next(mergeError);    
+}
+}
+```
+
+## Step 10 : Create Prisma Model
+
+Example: 
+```bash
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  firstname String   @db.VarChar(25)
+  lastname  String   @db.VarChar(25)
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+```
+
+## Step 11 : Migrate your code with databases
+```bash
+npx prisma migrate dev --name init
+```
