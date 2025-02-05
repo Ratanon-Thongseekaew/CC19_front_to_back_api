@@ -204,3 +204,51 @@ model Profile {
 ```bash
 npx prisma migrate dev --name init
 ```
+
+## Step 12 : Create PrismaClient
+create /config/prisma.js
+```bash 
+const {PrismaClient} = require("@prisma/client")
+const prisma = new PrismaClient()
+
+module.exports = prisma;
+```
+
+## Step13: Encrypt with BcryptJs
+Import bcryptjs 
+```bash
+const bcrypt = require("bcryptjs")
+```
+Js Coding [register update]
+```bash update 
+              const checkEmail = await prisma.profile.findFirst({
+         where:{
+             email:email,
+         },
+        });
+        console.log(checkEmail);
+        if(checkEmail){
+            return createErrors(400, "email is already exist! ")
+        }
+        //step 4 encrypt bcrypt
+        // const salt = bcrypt.genSaltSync(10)
+        const hashedPassword = bcrypt.hashSync(password,10)
+        console.log(hashedPassword)
+        //step 5 insert to DB 
+        const profile = await prisma.profile.create({
+            data:{
+                email:email,
+                firstname:firstname,
+                lastname:lastname,
+                password:hashedPassword
+            }
+        })
+        //step 6 reqsponse
+    res.json({message: "Register Success"})
+    } catch (error) {
+        console.log("step2 catch error")
+        next(error)
+    }
+}
+    ```
+
